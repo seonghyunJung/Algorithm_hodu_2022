@@ -110,8 +110,9 @@ class Person:
     remainingTime = 0
     usedTime = 0
 
-    def __init__(self):
+    def __init__(self, machineController: MachineController):
         self.usedTime = 0
+        self.machineController = machineController
 
     def do(self, beverage: Beverage):
         # 대기 중인 음료이면 건너뛰기
@@ -124,10 +125,10 @@ class Person:
         if doing.actType == 0:
             if beverage.accomplishOneStep():  # 하나 동작 후 음료 완성했으면 알리기
                 res = 2  # 성공 및 음료 완성
-            machineController.timeFlow(doing.usingTime)
+            self.machineController.timeFlow(doing.usingTime)
             print(beverage.name + ") " + doing.name)
         else:
-            machine = machineController.find(doing.actType)
+            machine = self.machineController.find(doing.actType)
             if machine is None:
                 return 0  # 실패 시 0 반환
             machine.setBeverage(beverage)
@@ -138,7 +139,7 @@ class Person:
 
     def timeFlow(self, time):
         self.usedTime += time
-        machineController.timeFlow(time)
+        self.machineController.timeFlow(time)
 
 
 # 동작 정의
