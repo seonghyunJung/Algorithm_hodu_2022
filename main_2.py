@@ -143,28 +143,105 @@ class Person:
 
 
 # 동작 정의
-ACT_ESPRESSO_MACHINE = Action("에스프레소 머신 작동시키기", 1, 0)
-ACT_BLENDER_MACHINE = Action("블렌더 작동시키기", 2, 0)
-ACT_WATER = Action("에스프레소에 물 넣기", 0, 10)
-ACT_PUT_ICE = Action("얼음 넣기", 0, 5)  # 아이스 음료 및, 블렌딩 음료 만들 때
-ACT_END = Action("음료 마무리 하여 손님에게 제공", 0, 10)
-ACT_POUR_MILK_IN_CUP = Action("컵에 우유 넣기", 0, 5)  # 아이스 라떼 만들 때
+ACT_ESPRESSO_MACHINE = Action("에스프레소 머신 작동시키기", 1, 24)
+ACT_BLENDER_MACHINE = Action("블렌더 작동시키기", 2, 30)
+ACT_POUR_BEVERAGE = Action("컵에 음료 붓기", 0, 5)
+ACT_POUR_ESPRESSO = Action("에스프레소 붓기", 0, 3)
+ACT_POUR_HOT_WATER_IN_CUP = Action("컵에 뜨거운 물 붓기", 0, 5)
+ACT_POUR_HOT_WATER_IN_MUG = Action("머그잔에 뜨거운 물 붓기", 0, 5)  # 티 우리기 위함
+ACT_POUR_WATER_IN_CUP = Action("컵에 시원한 물 붓기", 0, 5)
+ACT_PUT_ICE_IN_CUP = Action("컵에 얼음 넣기", 0, 5)  # 아이스 음료 만들 때
+ACT_PUT_ICE_IN_BLENDER = Action("블렌더에 얼음 넣기", 0, 5)  # 블렌딩 음료 만들 때
+ACT_END = Action("음료 마무리 하여 손님에게 제공", 0, 5)
+ACT_POUR_MILK_IN_CUP = Action("컵에 우유 넣기", 0, 5)  # 라떼 만들 때
 ACT_POUR_MILK_IN_BLENDER = Action("블렌더에 우유 넣기", 0, 5)   # 블렌딩 음료 만들 때
-ACT_STEAM_MILK = Action("우유 스팀하기", 0, 20)
-ACT_PUT_SYRUP = Action("시럽 넣기", 0, 5)
+ACT_STEAM_MILK = Action("우유 스팀하기", 0, 40)
+ACT_PUT_SUGAR_SYRUP = Action("설탕시럽 넣기", 0, 3)
+ACT_PUT_CHOCOLATE_SYRUP = Action("초콜릿시럽 넣기", 0, 3)
+ACT_PUT_CHOCOLATE_CHIP = Action("초콜릿 칩 넣기", 0, 3)
+ACT_PUT_CHOCOLATE_CHIP_ON_TOP = Action("음료 위에 초콜릿 칩 올리기", 0, 3)
+ACT_PUT_CONDENSED_MILK = Action("연유 넣기", 0, 3)
+ACT_PUT_WHIPPING_CREAM = Action("휘핑크림 올리기", 0, 5)
+ACT_STIR = Action("휘젓기", 0, 3)
+ACT_BREW_TEA_FOR_HOT = Action("티 우리기", 0, 5)
+ACT_BREW_TEA_FOR_ICE = Action("티 우리기", 3, 300)
+ACT_POUR_COLD_BREW = Action("컵에 콜드브루 커피 붓기", 0, 5)
 
 
 # 음료
-
-
 class BevAmericanoIce(Beverage):
     name = "아메리카노(ICE)"
-    recipe = [ACT_ESPRESSO_MACHINE, ACT_WATER, ACT_END]
+    recipe = [ACT_ESPRESSO_MACHINE, ACT_POUR_WATER_IN_CUP,
+              ACT_POUR_ESPRESSO, ACT_PUT_ICE_IN_CUP, ACT_END]
 
 
 class BevAmericanoHot(Beverage):
     name = "아메리카노(HOT)"
-    recipe = [ACT_ESPRESSO_MACHINE, ACT_WATER, ACT_END]
+    recipe = [ACT_ESPRESSO_MACHINE,
+              ACT_POUR_HOT_WATER_IN_CUP, ACT_POUR_ESPRESSO, ACT_END]
+
+
+class BevLatteIce(Beverage):
+    name = "카페라떼(ICE)"
+    recipe = [ACT_ESPRESSO_MACHINE, ACT_POUR_MILK_IN_CUP,
+              ACT_POUR_ESPRESSO, ACT_PUT_ICE_IN_CUP, ACT_END]
+
+
+class BevLatteHot(Beverage):
+    name = "카페라떼(HOT)"
+    recipe = [ACT_ESPRESSO_MACHINE, ACT_STEAM_MILK,
+              ACT_POUR_ESPRESSO, ACT_POUR_MILK_IN_CUP, ACT_END]
+
+
+class BevDolceLatteIce(Beverage):
+    name = "돌체라떼(ICE)"
+    recipe = [ACT_ESPRESSO_MACHINE, ACT_PUT_CONDENSED_MILK, ACT_POUR_MILK_IN_CUP,
+              ACT_STIR, ACT_PUT_ICE_IN_CUP, ACT_POUR_ESPRESSO, ACT_END]
+
+
+class BevDolceLatteHot(Beverage):
+    name = "돌체라떼(HOT)"
+    recipe = [ACT_ESPRESSO_MACHINE, ACT_PUT_CONDENSED_MILK, ACT_STEAM_MILK,
+              ACT_POUR_MILK_IN_CUP, ACT_STIR, ACT_POUR_ESPRESSO, ACT_END]
+
+
+class BevJavaChipFrappuccino(Beverage):
+    name = "자바칩 프라푸치노"
+    recipe = [ACT_POUR_MILK_IN_BLENDER, ACT_PUT_CHOCOLATE_SYRUP, ACT_PUT_CHOCOLATE_CHIP, ACT_PUT_ICE_IN_BLENDER,
+              ACT_BLENDER_MACHINE, ACT_POUR_BEVERAGE, ACT_PUT_WHIPPING_CREAM, ACT_PUT_CHOCOLATE_CHIP_ON_TOP, ACT_END]
+
+
+class BevEspressoFrappuccino(Beverage):
+    name = "에스프레소 프라푸치노"
+    recipe = [ACT_ESPRESSO_MACHINE, ACT_POUR_MILK_IN_BLENDER, ACT_PUT_SUGAR_SYRUP, ACT_POUR_ESPRESSO,
+              ACT_PUT_ICE_IN_BLENDER, ACT_BLENDER_MACHINE, ACT_POUR_BEVERAGE, ACT_PUT_WHIPPING_CREAM, ACT_END]
+
+
+class BevMintBlendTeaIce(Beverage):
+    name = "민트 블렌드 티(ICE)"
+    recipe = [ACT_POUR_HOT_WATER_IN_MUG, ACT_BREW_TEA_FOR_ICE,
+              ACT_POUR_BEVERAGE, ACT_POUR_WATER_IN_CUP, ACT_PUT_ICE_IN_CUP, ACT_END]
+
+
+class BevMintBlendTeaHot(Beverage):
+    name = "민트 블렌드 티(HOT)"
+    recipe = [ACT_POUR_HOT_WATER_IN_CUP, ACT_BREW_TEA_FOR_HOT, ACT_END]
+
+
+class BevYouthberryTeaIce(Beverage):
+    name = "유스베리 티(ICE)"
+    recipe = [ACT_POUR_HOT_WATER_IN_MUG, ACT_BREW_TEA_FOR_ICE,
+              ACT_POUR_BEVERAGE, ACT_POUR_WATER_IN_CUP, ACT_PUT_ICE_IN_CUP, ACT_END]
+
+
+class BevYouthberryTeaHot(Beverage):
+    name = "유스베리 티(HOT)"
+    recipe = [ACT_POUR_HOT_WATER_IN_CUP, ACT_BREW_TEA_FOR_HOT, ACT_END]
+
+
+class BevColdBrew(Beverage):
+    name = "콜드브루"
+    recipe = [ACT_POUR_COLD_BREW, ACT_PUT_ICE_IN_CUP, ACT_END]
 
 
 if __name__ == '__main__':
