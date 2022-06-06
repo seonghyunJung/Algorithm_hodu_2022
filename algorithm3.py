@@ -5,12 +5,13 @@ import numpy as np
 from main_2 import *
 
  # 객체 생성
-machineController = MachineController([Machine("에스프레소 머신1", 10), Machine("에스프레소 머신2", 10)],
-                                        [Machine("블렌더1", 30), Machine("블렌더2", 30)])
+machineController = MachineController([Machine("에스프레소 머신1", 24), Machine("에스프레소 머신2", 24)],
+                                          [Machine("블렌더1", 30), Machine("블렌더2", 30)],
+                                          [Machine("티 우리기1", 300), Machine("티 우리기2", 300), Machine("티 우리기3", 300), Machine("티 우리기4", 300), Machine("티 우리기5", 300)])
 person = Person(machineController)
 
 # order = [] #주문 (음료 큐)
-order = [BevAmericanoIce(), BevAmericanoIce(), BevAmericanoHot()]
+order = [BevAmericanoIce(), BevEarlGreyTeaIce(), BevCaffeMochaHot(), BevMochaFrappuccino(), BevAmericanoHot(), BevCaramelMacchiatoHot(), BevSignatureChocoHot(), BevColdBrew()]
 
 #  [BevAmericanoIce(), BevEarlGreyTeaIce(), BevEarlGreyTeaIce(), BevMochaFrappuccino(), BevAmericanoHot(), BevMochaFrappuccino(), BevAmericanoIce(), BevAmericanoHot()]
 
@@ -26,7 +27,7 @@ temp = []
 
 while order: # 주문이 있는 동안 반복
     res = person.do(order[current_idx]) # 위치의 인덱스 실행
-
+    print(person.usedTime)
     if res == 2: # 완료한 경우
         order.pop(current_idx) # 해당 인덱스의 값 pop
         doing -= 1 # 작업이 끝났으므로, 진행중인 작업 개수 -1
@@ -52,7 +53,7 @@ while order: # 주문이 있는 동안 반복
         # 선택지4: 바로 다음 작업 실행
         # pass
 
-        
+        continue
 
 
     elif res == 0: # 해당 작업을 실행할 수 없는 경우
@@ -60,9 +61,10 @@ while order: # 주문이 있는 동안 반복
             doing+=1 # 진행중인 작업 개수 +1
         elif check == current_idx: # 작업을 더이상 늘릴 수 없는 경우, 다른 작업을 진행해봤으나, 더 진행이 안되는 경우
             # 기계 남은 시간 중 가장 짧은 시간만큼 기다리기
-            f1 = machineController.getEarlistEnd(1)
+            f1 = machineController.getEarlistEnd(1) # machine 개수에 따라 정하기
             f2 = machineController.getEarlistEnd(2)
-            f = min(f1, f2)
+            f3 = machineController.getEarlistEnd(3)
+            f = min(f1, f2, f3)
             person.timeFlow(f)
             check = -1
             continue
