@@ -31,13 +31,14 @@ class Beverage:
 class Machine:
     name = ""
     isUsing = False
-    usingTime = 10
+    usingTime = 1000000
     remainingTime = usingTime
     beverage = None
 
     def __init__(self, name:str, usingTime:int):
         self.name = name
-        self.usingTime = usingTime;
+        self.usingTime = usingTime
+        self.remainingTime = usingTime
 
     def setBeverage(self, beverage:Beverage):
         self.beverage = beverage
@@ -99,6 +100,12 @@ class MachineController:
 
     def sendBackward(self, machineKind:int):
         self.machines[machineKind-1].append(self.machines[machineKind-1].pop(0))
+
+    def testPrint(self):
+        for machinesOneType in self.machines:
+            for machine in machinesOneType:
+                if machine.isUsing:
+                    print(machine.name + " 남은 시간: " + str(machine.remainingTime))
 
 class Person:
     remainingTime = 0
@@ -376,51 +383,20 @@ if __name__ == '__main__':
     '''
     while len(order) > 0:
         for oneTeam in order:
-            b = None
-            minTime = 10000
-            minInd = 10000
-            for _b in oneTeam:
-                i = 0
-                for _a in _b.recipe:
-                    if not _b.waiting and minTime >= _a.usingTime and minInd > i:
-                        minTime = _a.usingTime
-                        minInd = i
-                        b = _b
-                    i += 1
-            if b is None:
-                b = oneTeam[0]
-            res = person.do(b)
-            if res != 0:
-                if res == 2:
-                    oneTeam.remove(b)
-                    if len(oneTeam) == 0:
-                        order.remove(oneTeam)
-                        print("팀 하나 끝")
-                break
-        #할 수 있는게 없는 경우, 시간 보내기
-        if res == 0:
-            # 기계 남은 시간 중 가장 짧은 시간만큼 기다리기
-            f1 = machineController.getEarlistEnd(1)
-            f2 = machineController.getEarlistEnd(2)
-            f3 = machineController.getEarlistEnd(3)
-            f = min(f1, f2, f3)
-            person.timeFlow(f)
-            print(str(f) + "초 대기")
-        print(person.usedTime)
-    print(person.usedTime)
-
-    machineController = MachineController([Machine("에스프레소 머신1", 24), Machine("에스프레소 머신2", 24)],
-                                          [Machine("블렌더1", 30), Machine("블렌더2", 30)],
-                                          [Machine("티 우리기1", 300), Machine("티 우리기2", 300), Machine("티 우리기3", 300),
-                                           Machine("티 우리기4", 300), Machine("티 우리기5", 300)])
-    person = Person()
-
-    # order = [] #주문 (음료 큐)
-    order = [[BevAmericanoIce(), BevEarlGreyTeaIce(), BevEarlGreyTeaIce(), BevMochaFrappuccino(), BevAmericanoHot()], [BevMochaFrappuccino(), BevAmericanoIce(), BevAmericanoHot()]]  # 주문 (음료 큐)
-    ##---------------우리가 짜야하는 알고리즘(예시로 그냥 무작정 앞에서부터 하는 알고리즘---------------##
-    while len(order) > 0:
-        for oneTeam in order:
-            for b in oneTeam:
+            while len(order) > 0:
+                b = None
+                minTime = 10000
+                minInd = 10000
+                for _b in oneTeam:
+                    i = 0
+                    for _a in _b.recipe:
+                        if not _b.waiting and minTime >= _a.usingTime and minInd > i:
+                            minTime = _a.usingTime
+                            minInd = i
+                            b = _b
+                        i += 1
+                if b is None:
+                    b = oneTeam[0]
                 res = person.do(b)
                 if res != 0:
                     if res == 2:
@@ -428,15 +404,49 @@ if __name__ == '__main__':
                         if len(oneTeam) == 0:
                             order.remove(oneTeam)
                             print("팀 하나 끝")
-                    break
-            # 할 수 있는게 없는 경우, 시간 보내기
-            if res == 0:
-                # 기계 남은 시간 중 가장 짧은 시간만큼 기다리기
-                f1 = machineController.getEarlistEnd(1)
-                f2 = machineController.getEarlistEnd(2)
-                f3 = machineController.getEarlistEnd(3)
-                f = min(f1, f2, f3)
-                person.timeFlow(f)
-                print(str(f) + "초 대기")
-            print(person.usedTime)
+                            break
+                #할 수 있는게 없는 경우, 시간 보내기
+                if res == 0:
+                    # 기계 남은 시간 중 가장 짧은 시간만큼 기다리기
+                    f1 = machineController.getEarlistEnd(1)
+                    f2 = machineController.getEarlistEnd(2)
+                    f3 = machineController.getEarlistEnd(3)
+                    f = min(f1, f2, f3)
+                    person.timeFlow(f)
+                    print(str(f) + "초 대기")
+                print(person.usedTime)
+                machineController.testPrint()
+    print(person.usedTime)
+
+    # 비교용 옛 코드
+    # machineController = MachineController([Machine("에스프레소 머신1", 24), Machine("에스프레소 머신2", 24)],
+    #                                       [Machine("블렌더1", 30), Machine("블렌더2", 30)],
+    #                                       [Machine("티 우리기1", 300), Machine("티 우리기2", 300), Machine("티 우리기3", 300),
+    #                                        Machine("티 우리기4", 300), Machine("티 우리기5", 300)])
+    # person = Person()
+    #
+    # # order = [] #주문 (음료 큐)
+    # order = [[BevAmericanoIce(), BevEarlGreyTeaIce(), BevEarlGreyTeaIce(), BevMochaFrappuccino(), BevAmericanoHot()], [BevMochaFrappuccino(), BevAmericanoIce(), BevAmericanoHot()]]  # 주문 (음료 큐)
+    # ##---------------우리가 짜야하는 알고리즘(예시로 그냥 무작정 앞에서부터 하는 알고리즘---------------##
+    # while len(order) > 0:
+    #     for oneTeam in order:
+    #         for b in oneTeam:
+    #             res = person.do(b)
+    #             if res != 0:
+    #                 if res == 2:
+    #                     oneTeam.remove(b)
+    #                     if len(oneTeam) == 0:
+    #                         order.remove(oneTeam)
+    #                         print("팀 하나 끝")
+    #                 break
+    #         # 할 수 있는게 없는 경우, 시간 보내기
+    #         if res == 0:
+    #             # 기계 남은 시간 중 가장 짧은 시간만큼 기다리기
+    #             f1 = machineController.getEarlistEnd(1)
+    #             f2 = machineController.getEarlistEnd(2)
+    #             f3 = machineController.getEarlistEnd(3)
+    #             f = min(f1, f2, f3)
+    #             person.timeFlow(f)
+    #             print(str(f) + "초 대기")
+    #         print(person.usedTime)
 
