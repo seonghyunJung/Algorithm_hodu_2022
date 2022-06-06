@@ -75,11 +75,13 @@ class MachineController:
     machineBlender = []
     machineTea = []
     machines = []
+
     def __init__(self, machineEspresso, machineBlender, machineTea):
         self.machineEspresso = machineEspresso
         self.machineBlender = machineBlender
         self.machineTea = machineTea
-        self.machines = [self.machineEspresso, self.machineBlender, self.machineTea]
+        self.machines = [self.machineEspresso,
+                         self.machineBlender, self.machineTea]
 
     def find(self, machineKind: int):
         for machine in self.machines[machineKind-1]:
@@ -413,8 +415,10 @@ class BevVanillaLatteHot(Beverage):
 if __name__ == '__main__':
     # 객체 생성
     machineController = MachineController([Machine("에스프레소 머신1", 10), Machine("에스프레소 머신2", 10)],
-                                          [Machine("블렌더1", 30), Machine("블렌더2", 30)])
-    person = Person()
+                                          [Machine("블렌더1", 30),
+                                           Machine("블렌더2", 30)],
+                                          [Machine("티 우리기1", 300), Machine("티 우리기2", 300), Machine("티 우리기3", 300), Machine("티 우리기4", 300), Machine("티 우리기5", 300)])
+    person = Person(machineController)
 
     # order = [] #주문 (음료 큐)
     order = [BevAmericanoIce(), BevAmericanoIce(),
