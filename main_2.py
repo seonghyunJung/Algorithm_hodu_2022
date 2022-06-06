@@ -128,7 +128,7 @@ class Person:
             if beverage.accomplishOneStep():  # 하나 동작 후 음료 완성했으면 알리기
                 res = 2  # 성공 및 음료 완성
             self.machineController.timeFlow(doing.usingTime)
-            print(beverage.name + ") " + doing.name)
+            print(beverage.name + " " + doing.name)
         else:
             machine = self.machineController.find(doing.actType)
             if machine is None:
@@ -136,7 +136,7 @@ class Person:
             machine.setBeverage(beverage)
             machine.use()
             beverage.waiting = True
-            print(beverage.name + ") " + doing.name)
+            print(beverage.name + " " + doing.name)
         return res
 
     def timeFlow(self, time):
