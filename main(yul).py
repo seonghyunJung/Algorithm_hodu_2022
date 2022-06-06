@@ -383,7 +383,7 @@ if __name__ == '__main__':
     '''
     while len(order) > 0:
         for oneTeam in order:
-            while len(order) > 0:
+            while len(oneTeam) > 0:
                 b = None
                 minTime = 10000
                 minInd = 10000
