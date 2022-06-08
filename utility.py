@@ -1,6 +1,14 @@
-# 사용법 : 
+# =========================== utility 사용법 ===================================
+#  
+# < read_data_to_2d/3d_array 함수 >
 # from utility import read_data_to_2d_array, read_data_to_3d_array
-# 를 사용해 import 한 뒤 사용하시면 됩니다.
+# 를 사용해 import 한 뒤 
+# team, order = read_data_to_2d_array(file_path)
+# 또는
+# team, order = read_data_to_3d_array(file_path)
+# 코드를 통해 사용하시면 됩니다. 입력과 출력은 각 함수에 명시되어있습니다.
+# 
+# =============================================================================
 
 def read_data_to_2d_array(file_path="Testing_data(정상 주문)/testing_data(1만(정상)).txt"):
     # 입력: file path
