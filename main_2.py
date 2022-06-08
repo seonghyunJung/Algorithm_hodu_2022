@@ -171,7 +171,7 @@ ACT_PUT_CHOCOLATE_CHIP_ON_TOP = Action("음료 위에 초콜릿 칩 올리기", 
 ACT_PUT_CONDENSED_MILK = Action("연유 넣기", 0, 3)
 ACT_PUT_WHIPPING_CREAM = Action("휘핑크림 올리기", 0, 5)
 ACT_STIR = Action("휘젓기", 0, 3)
-ACT_BREW_TEA_FOR_HOT = Action("티 우리기", 0, 5)
+ACT_PREP_TEA = Action("티백 꺼내서 넣기", 0, 5)
 ACT_BREW_TEA_FOR_ICE = Action("티 우리기", 3, 0)
 ACT_POUR_COLD_BREW = Action("컵에 콜드브루 커피 붓기", 0, 5)
 ACT_PUT_GREEN_TEA_POWDER = Action("그린티 파우더 넣기", 0, 5)
@@ -296,79 +296,79 @@ class BevMangoBananaBlended(Beverage):
 
 class BevMintBlendTeaIce(Beverage):
     name = "민트 블렌드 티(ICE)"
-    recipe = [ACT_POUR_HOT_WATER_IN_MUG, ACT_BREW_TEA_FOR_ICE,
+    recipe = [ACT_POUR_HOT_WATER_IN_MUG, ACT_PREP_TEA, ACT_BREW_TEA_FOR_ICE,
               ACT_POUR_BEVERAGE, ACT_POUR_WATER_IN_CUP, ACT_PUT_ICE_IN_CUP, ACT_END]
 
 
 class BevMintBlendTeaHot(Beverage):
     name = "민트 블렌드 티(HOT)"
-    recipe = [ACT_POUR_HOT_WATER_IN_CUP, ACT_BREW_TEA_FOR_HOT, ACT_END]
+    recipe = [ACT_POUR_HOT_WATER_IN_CUP, ACT_PREP_TEA, ACT_END]
 
 
 class BevEarlGreyTeaIce(Beverage):
     name = "얼그레이 티(ICE)"
-    recipe = [ACT_POUR_HOT_WATER_IN_MUG, ACT_BREW_TEA_FOR_ICE,
+    recipe = [ACT_POUR_HOT_WATER_IN_MUG, ACT_PREP_TEA, ACT_BREW_TEA_FOR_ICE,
               ACT_POUR_BEVERAGE, ACT_POUR_WATER_IN_CUP, ACT_PUT_ICE_IN_CUP, ACT_END]
 
 
 class BevEarlGreyTeaHot(Beverage):
     name = "얼그레이 티(HOT)"
-    recipe = [ACT_POUR_HOT_WATER_IN_CUP, ACT_BREW_TEA_FOR_HOT, ACT_END]
+    recipe = [ACT_POUR_HOT_WATER_IN_CUP, ACT_PREP_TEA, ACT_END]
 
 
 class BevYouthberryTeaIce(Beverage):
     name = "유스베리 티(ICE)"
-    recipe = [ACT_POUR_HOT_WATER_IN_MUG, ACT_BREW_TEA_FOR_ICE,
+    recipe = [ACT_POUR_HOT_WATER_IN_MUG, ACT_PREP_TEA, ACT_BREW_TEA_FOR_ICE,
               ACT_POUR_BEVERAGE, ACT_POUR_WATER_IN_CUP, ACT_PUT_ICE_IN_CUP, ACT_END]
 
 
 class BevYouthberryTeaHot(Beverage):
     name = "유스베리 티(HOT)"
-    recipe = [ACT_POUR_HOT_WATER_IN_CUP, ACT_BREW_TEA_FOR_HOT, ACT_END]
+    recipe = [ACT_POUR_HOT_WATER_IN_CUP, ACT_PREP_TEA, ACT_END]
 
 
 class BevEnglishBreakfastTeaIce(Beverage):
     name = "잉글리쉬브렉퍼스트 티(ICE)"
-    recipe = [ACT_POUR_HOT_WATER_IN_MUG, ACT_BREW_TEA_FOR_ICE,
+    recipe = [ACT_POUR_HOT_WATER_IN_MUG, ACT_PREP_TEA, ACT_BREW_TEA_FOR_ICE,
               ACT_POUR_BEVERAGE, ACT_POUR_WATER_IN_CUP, ACT_PUT_ICE_IN_CUP, ACT_END]
 
 
 class BevEnglishBreakfastTeaHot(Beverage):
     name = "잉글리쉬브렉퍼스트 티(HOT)"
-    recipe = [ACT_POUR_HOT_WATER_IN_CUP, ACT_BREW_TEA_FOR_HOT, ACT_END]
+    recipe = [ACT_POUR_HOT_WATER_IN_CUP, ACT_PREP_TEA, ACT_END]
 
 
 class BevGreenTeaIce(Beverage):
     name = "제주 그린티(ICE)"
-    recipe = [ACT_POUR_HOT_WATER_IN_MUG, ACT_BREW_TEA_FOR_ICE,
+    recipe = [ACT_POUR_HOT_WATER_IN_MUG, ACT_PREP_TEA, ACT_BREW_TEA_FOR_ICE,
               ACT_POUR_BEVERAGE, ACT_POUR_WATER_IN_CUP, ACT_PUT_ICE_IN_CUP, ACT_END]
 
 
 class BevGreenTeaHot(Beverage):
     name = "제주 그린티(HOT)"
-    recipe = [ACT_POUR_HOT_WATER_IN_CUP, ACT_BREW_TEA_FOR_HOT, ACT_END]
+    recipe = [ACT_POUR_HOT_WATER_IN_CUP, ACT_PREP_TEA, ACT_END]
 
 
 class BevChamomileTeaIce(Beverage):
     name = "캐모마일티(ICE)"
-    recipe = [ACT_POUR_HOT_WATER_IN_MUG, ACT_BREW_TEA_FOR_ICE,
+    recipe = [ACT_POUR_HOT_WATER_IN_MUG, ACT_PREP_TEA, ACT_BREW_TEA_FOR_ICE,
               ACT_POUR_BEVERAGE, ACT_POUR_WATER_IN_CUP, ACT_PUT_ICE_IN_CUP, ACT_END]
 
 
 class BevChamomileTeaHot(Beverage):
     name = "캐모마일티(HOT)"
-    recipe = [ACT_POUR_HOT_WATER_IN_CUP, ACT_BREW_TEA_FOR_HOT, ACT_END]
+    recipe = [ACT_POUR_HOT_WATER_IN_CUP, ACT_PREP_TEA, ACT_END]
 
 
 class BevHibiscusTeaIce(Beverage):
     name = "히비스커스티(ICE)"
-    recipe = [ACT_POUR_HOT_WATER_IN_MUG, ACT_BREW_TEA_FOR_ICE,
+    recipe = [ACT_POUR_HOT_WATER_IN_MUG, ACT_PREP_TEA, ACT_BREW_TEA_FOR_ICE,
               ACT_POUR_BEVERAGE, ACT_POUR_WATER_IN_CUP, ACT_PUT_ICE_IN_CUP, ACT_END]
 
 
 class BevHibiscusTeaHot(Beverage):
     name = "히비스커스티(HOT)"
-    recipe = [ACT_POUR_HOT_WATER_IN_CUP, ACT_BREW_TEA_FOR_HOT, ACT_END]
+    recipe = [ACT_POUR_HOT_WATER_IN_CUP, ACT_PREP_TEA, ACT_END]
 
 
 class BevGreenTeaLatteIce(Beverage):
