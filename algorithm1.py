@@ -78,12 +78,15 @@ class Action:
 class MachineController:
     machineEspresso = []
     machineBlender = []
+    machineTea = []
     machines = []
 
-    def __init__(self, machineEspresso, machineBlender):
+    def __init__(self, machineEspresso, machineBlender, machineTea):
         self.machineEspresso = machineEspresso
         self.machineBlender = machineBlender
-        self.machines = [self.machineEspresso, self.machineBlender]
+        self.machineTea = machineTea
+        self.machines = [self.machineEspresso,
+                         self.machineBlender, self.machineTea]
 
     def find(self, machineKind: int):
         for machine in self.machines[machineKind-1]:
@@ -108,15 +111,17 @@ class MachineController:
         return res
 
     def sendBackward(self, machineKind: int):
-        self.machines[machineKind - 1].append(self.machines[machineKind-1].pop(0))
+        self.machines[machineKind -
+                      1].append(self.machines[machineKind-1].pop(0))
 
 
 class Person:
     remainingTime = 0
     usedTime = 0
 
-    def __init__(self):
+    def __init__(self, machineController):
         self.usedTime = 0
+        self.machineController = machineController
 
     def do(self, beverage: Beverage):
         # 대기 중인 음료이면 건너뛰기
@@ -129,10 +134,10 @@ class Person:
         if doing.actType == 0:
             if beverage.accomplishOneStep():  # 하나 동작 후 음료 완성했으면 알리기
                 res = 2  # 성공 및 음료 완성
-            machineController.timeFlow(doing.usingTime)
+            self.machineController.timeFlow(doing.usingTime)
             print(beverage.name + ") " + doing.name)
         else:
-            machine = machineController.find(doing.actType)
+            machine = self.machineController.find(doing.actType)
             if machine is None:
                 return 0  # 실패 시 0 반환
             machine.setBeverage(beverage)
@@ -143,12 +148,12 @@ class Person:
 
     def timeFlow(self, time):
         self.usedTime += time
-        machineController.timeFlow(time)
+        self.machineController.timeFlow(time)
 
 
 # 동작 정의
-ACT_ESPRESSO_MACHINE = Action("에스프레소 머신 작동시키기", 1, 24)
-ACT_BLENDER_MACHINE = Action("블렌더 작동시키기", 2, 30)
+ACT_ESPRESSO_MACHINE = Action("에스프레소 머신 작동시키기", 1, 0)
+ACT_BLENDER_MACHINE = Action("블렌더 작동시키기", 2, 0)
 ACT_POUR_BEVERAGE = Action("컵에 음료 붓기", 0, 5)
 ACT_POUR_ESPRESSO = Action("에스프레소 붓기", 0, 3)
 ACT_POUR_HOT_WATER_IN_CUP = Action("컵에 뜨거운 물 붓기", 0, 5)
@@ -172,7 +177,7 @@ ACT_PUT_CONDENSED_MILK = Action("연유 넣기", 0, 3)
 ACT_PUT_WHIPPING_CREAM = Action("휘핑크림 올리기", 0, 5)
 ACT_STIR = Action("휘젓기", 0, 3)
 ACT_BREW_TEA_FOR_HOT = Action("티 우리기", 0, 5)
-ACT_BREW_TEA_FOR_ICE = Action("티 우리기", 3, 300)
+ACT_BREW_TEA_FOR_ICE = Action("티 우리기", 3, 0)
 ACT_POUR_COLD_BREW = Action("컵에 콜드브루 커피 붓기", 0, 5)
 ACT_PUT_GREEN_TEA_POWDER = Action("그린티 파우더 넣기", 0, 5)
 ACT_PEEL_BANANA = Action("바나나 껍질 벗기기", 0, 5)
@@ -425,11 +430,14 @@ def do(self, b: Beverage):
         f = min(f1, f2)
         person.timeFlow(f)
 
+
 if __name__ == '__main__':
     # 객체 생성
-    machineController = MachineController([Machine("에스프레소 머신1", 10), Machine("에스프레소 머신2", 10)],
-                                          [Machine("블렌더1", 30), Machine("블렌더2", 30)])
-    person = Person()
+    machineController = MachineController([Machine("에스프레소 머신1", 24), Machine("에스프레소 머신2", 24)],
+                                          [Machine("블렌더1", 30),
+                                           Machine("블렌더2", 30)],
+                                          [Machine("티 우리기1", 300), Machine("티 우리기2", 300), Machine("티 우리기3", 300), Machine("티 우리기4", 300), Machine("티 우리기5", 300)])
+    person = Person(machineController)
 
     # order = [] #주문 (음료 큐)
     order = [BevAmericanoIce(), BevAmericanoIce(),
