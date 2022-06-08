@@ -387,7 +387,7 @@ if __name__ == '__main__':
         machineOrder = []
         personOrder = []
 
-        # 주문의 act 기록
+        # 음료별 현재 처리해야 할 act 기록
         for b in order:
             currentOrder.append(b.getCurrentStep())
 
@@ -406,7 +406,7 @@ if __name__ == '__main__':
             flag2 = True
 
         # 기계동작이 존재하는 경우: 모든 기계 동작을 확인
-        # 대기 중이면 다음 동작을 확인 대기 중이지 않으면 실행함
+        # 대기 중이면 다음 동작을 확인, 대기 중이지 않으면 실행함
         if flag1:
             for m in machineOrder:
                 b = order[m]
