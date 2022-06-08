@@ -378,6 +378,9 @@ if __name__ == '__main__':
     # order = [] #주문 (음료 큐)
     order = [BevAmericanoIce(), BevEarlGreyTeaIce(), BevEarlGreyTeaIce(), BevMochaFrappuccino(), BevAmericanoHot(), BevMochaFrappuccino(), BevAmericanoIce(), BevAmericanoHot()]  # 주문 (음료 큐)
 
+    waitingTime = 0
+    bevCompTime = []
+
     while len(order) > 0:
         flag1 = False    # 기계 동작이 존재
         flag2 = False    # 사람 동작이 존재
@@ -412,8 +415,6 @@ if __name__ == '__main__':
                 b = order[m]
                 res = person.do(b)
                 if res != 0:
-                    if res == 2:
-                        order.remove(b)
                     flag3 = True
                     break
                 if res == 0:
@@ -429,6 +430,7 @@ if __name__ == '__main__':
                 f2 = machineController.getEarlistEnd(2)
                 f3 = machineController.getEarlistEnd(3)
                 f = min(f1, f2, f3)
+                waitingTime += f
                 person.timeFlow(f)
                 print(str(f) + "초 대기")
             for p in personOrder:
@@ -436,9 +438,22 @@ if __name__ == '__main__':
                 res = person.do(b)
                 if res != 0:
                     if res == 2:
+                        bevCompTime.append(person.usedTime)
                         order.remove(b)
                         break
                 if res == 0:
                     continue
 
-    print(person.usedTime)
+    print()
+    print("=========================== 실행 결과 ==========================")
+    print("총 걸린 시간: ", person.usedTime)
+    print("모든 기계 실행중인 동안 기다린 시간: ", waitingTime)
+    print("음료가 나오기까지 걸린 시간: ", bevCompTime)
+    print("================================================================")
+
+
+# =========================== 실행 결과 ==========================
+# 총 걸린 시간:  360
+# 모든 기계 실행중인 동안 기다린 시간:  182
+# 음료가 나오기까지 걸린 시간:  [62, 67, 113, 128, 133, 138, 355, 360]
+# ================================================================
