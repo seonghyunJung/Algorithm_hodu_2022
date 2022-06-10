@@ -23,8 +23,17 @@ class Recorder: # 알고리즘 평가 지표 기록 클래스
         self.beverage_average_making_time_list.append(np.mean(maiking_time))# case 별 음료가 만들어지는 시간의 평균 기록
         self.beverage_average_complete_time_list.append(np.mean(beverage_start_time)) # case 별 음료가 완성된 시간의 평균 기록
         
-        team_complete_time = [max(beverage_complete_time[i:j]) for i, j in zip([0]+team_len,team_len)] # 팀별 끝난 시간 계산
+        team_idx = self.team_len_to_team_idx(team_len) # 팀 길이 -> 팀 인덱스 변환
+        team_complete_time = [max(beverage_complete_time[i:j]) for i, j in zip([0]+team_idx,team_idx)] # 팀별 끝난 시간 계산
         self.team_average_complete_time_list.append(np.mean(team_complete_time)) # case 별 팀 음료가 모두 완성된 시간의 평균 기록
+
+    def team_len_to_team_idx(self, team_len) -> list:
+        len = 0
+        team_idx = []
+        for l in team_len:
+            len+=l
+            team_idx.append(len)
+        return team_idx
 
 
  # 객체 생성
@@ -81,7 +90,7 @@ for t, c in zip(team, case):
         if res == 2: # 완료한 경우
             print("[제작 완료]", order[current_idx].name)
             order.pop(current_idx) # 해당 인덱스의 값 pop
-            beverage_complete_time[current_idx+done] = person.usedTime # 끝난 시간 저장
+            beverage_complete_time[current_idx+done] = person.usedTime # 끝난 시간 저장 # TODO: 끝난 시간 저장 오류 수정
             done += 1
             if doing !=1: # 모든 작업을 끝냈거나, 1개 초과로 실행중일 때
                 doing -= 1 # 작업이 끝났으므로, 진행중인 작업 개수 -1
@@ -94,7 +103,7 @@ for t, c in zip(team, case):
         
         elif res == 1: # 작업이 진행되었을 때
             if order[current_idx].step <= 1 and beverage_start_time[current_idx+done] == 0: # 음료의 처음 작업 식행 시
-                beverage_start_time[current_idx+done] = person.usedTime # 시작 시간 저장
+                beverage_start_time[current_idx+done] = person.usedTime # 시작 시간 저장 # TODO: 시작 시간 저장 오류 수정
 
             # print("[제작 진행]", end=" ")
             # # 선택지3: 사람이 진행하는 일이 있다면, 해당 작업을 저장, 없다면, 모든 진행중 저장
