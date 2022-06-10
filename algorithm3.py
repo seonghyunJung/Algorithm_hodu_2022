@@ -3,6 +3,8 @@
 
 import numpy as np
 from main_2 import *
+import copy # 깊은 복사에 사용
+from utility import read_data_to_2d_array # 파일 읽기에 사용
 
  # 객체 생성
 machineController = MachineController([Machine("에스프레소 머신1", 24), Machine("에스프레소 머신2", 24)],
@@ -10,8 +12,14 @@ machineController = MachineController([Machine("에스프레소 머신1", 24), M
                                           [Machine("티 우리기1", 300), Machine("티 우리기2", 300), Machine("티 우리기3", 300), Machine("티 우리기4", 300), Machine("티 우리기5", 300)])
 person = Person(machineController)
 
+
+file_path = "Testing_data(정상 주문)/testing_data(1만(정상)).txt"
+team, case = read_data_to_2d_array(file_path)
+i = 0
+order = [copy.deepcopy(bevList[j]) for j in case[i]]
+
 # order = [] #주문 (음료 큐)
-order = [BevAmericanoIce(), BevEarlGreyTeaIce(), BevCaffeMochaHot(), BevMochaFrappuccino(), BevAmericanoHot(), BevCaramelMacchiatoHot(), BevSignatureChocoHot(), BevColdBrew()]
+# order = [BevAmericanoIce(), BevEarlGreyTeaIce(), BevCaffeMochaHot(), BevMochaFrappuccino(), BevAmericanoHot(), BevCaramelMacchiatoHot(), BevSignatureChocoHot(), BevColdBrew()]
 
 #  [BevAmericanoIce(), BevEarlGreyTeaIce(), BevEarlGreyTeaIce(), BevMochaFrappuccino(), BevAmericanoHot(), BevMochaFrappuccino(), BevAmericanoIce(), BevAmericanoHot()]
 
@@ -19,6 +27,8 @@ order = [BevAmericanoIce(), BevEarlGreyTeaIce(), BevCaffeMochaHot(), BevMochaFra
 
 
 ##--------------------우리가 짜야하는 알고리즘---------------------##
+
+
 
 current_idx = 0 # 실행중 인덱스 초기화
 doing = 1 # 진행중인 작업 개수 초기화
