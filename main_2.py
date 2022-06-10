@@ -411,6 +411,8 @@ class BevVanillaLatteHot(Beverage):
     recipe = [ACT_PUT_VANILLA_SYRUP, ACT_ESPRESSO_MACHINE,
               ACT_STEAM_MILK, ACT_STIR, ACT_POUR_MILK_IN_CUP, ACT_END]
 
+# 깊은 복사 필요!
+bevList = [BevAmericanoIce(),BevAmericanoHot(),BevLatteIce(),BevLatteHot(),BevDolceLatteIce(),BevDolceLatteHot(),BevCaffeMochaIce(),BevCaffeMochaHot(),BevWhiteChocoMochaIce(),BevWhiteChocoMochaHot(),BevCaramelMacchiatoIce(),BevCaramelMacchiatoHot(),BevJavaChipFrappuccino(),BevEspressoFrappuccino(),BevMochaFrappuccino(),BevCaramelFrappuccino(),BevWhiteChocoMochaFrappuccino(),BevGreenTeaFrappuccino(),BevMangoBananaBlended(),BevMintBlendTeaIce(),BevMintBlendTeaHot(),BevEarlGreyTeaIce(),BevEarlGreyTeaHot(),BevYouthberryTeaIce(),BevYouthberryTeaHot(),BevEnglishBreakfastTeaIce(),BevEnglishBreakfastTeaHot(),BevGreenTeaIce(),BevGreenTeaHot(),BevChamomileTeaIce(),BevChamomileTeaHot(), BevHibiscusTeaIce(),BevHibiscusTeaHot(),BevGreenTeaLatteIce(),BevGreenTeaLatteHot(),BevSignatureChocoIce(), BevSignatureChocoHot(),BevColdBrew(),BevVanillaLatteIce(),BevVanillaLatteHot(),BevAmericanoIce(),BevAmericanoHot(),BevLatteIce()]
 
 if __name__ == '__main__':
     # 객체 생성
