@@ -6,6 +6,28 @@ from main_2 import *
 import copy # 깊은 복사에 사용
 from utility import read_data_to_2d_array # 파일 읽기에 사용
 
+
+class Recorder: # 알고리즘 평가 지표 기록 클래스
+    def __init__(self):
+        self.all_complete_time_list = [] # case 별 모든 작업이 끝날 때까지 걸린 시간 기록
+        self.waited_time_list = [] # case 별 기다린 시간 기록
+        self.beverage_average_making_time_list = [] # case 별 음료가 만들어지는 시간의 평균 기록
+        self.beverage_average_complete_time_list = [] # case 별 음료가 완성된 시간의 평균 기록
+        self.team_average_complete_time_list = [] # case 별 팀 음료가 모두 완성된 시간의 평균 기록
+    
+    def record(self, all_complete_time:int, waited_time:int, beverage_start_time:list, beverage_complete_time:list, team:list):
+        self.all_complete_time_list.append(all_complete_time)# case 별 모든 작업이 끝날 때까지 걸린 시간 기록
+        self.waited_time_list.append(waited_time)# case 별 기다린 시간 기록
+
+        maiking_time = np.array(beverage_complete_time) - np.array(beverage_start_time) # 만드는데 걸린 시간 np.array()
+        self.beverage_average_making_time_list.append(np.mean(maiking_time))# case 별 음료가 만들어지는 시간의 평균 기록
+        self.beverage_average_complete_time_list.append(np.mean(beverage_start_time)) # case 별 음료가 완성된 시간의 평균 기록
+
+        team_complete_time = [np.max(beverage_complete_time[i:j]) for i, j in zip([0]+team[:-1],team)] # 팀별 끝난 시간 계산
+        self.team_average_complete_time_list.append(np.mean(team_complete_time)) # case 별 팀 음료가 모두 완성된 시간의 평균 기록
+
+
+
  # 객체 생성
 machineController = MachineController([Machine("에스프레소 머신1", 24), Machine("에스프레소 머신2", 24)],
                                           [Machine("블렌더1", 30), Machine("블렌더2", 30)],
