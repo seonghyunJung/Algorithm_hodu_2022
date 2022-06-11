@@ -3,7 +3,7 @@
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 import math
-
+import json
 
 class Beverage:
     name = ""
@@ -12,9 +12,11 @@ class Beverage:
     endStep = 0
     waiting = False
 
-    def __init__(self):  # , name:str, recipe:list, step:int = 0
-        # self.name = name
-        # self.recipe = recipe
+    def __init__(self, name="", recipe=None):  # , name:str, recipe:list, step:int = 0
+        if name != "":
+            self.name = name
+        if recipe is not None:
+            self.recipe = recipe
         self.step = 0
         self.waiting = False
         self.endStep = len(self.recipe)
@@ -58,6 +60,12 @@ class Machine:
             self.beverage.accomplishOneStep()  # 모든 음료는 마무리 동작으로 끝난다 가정
             return overUse
 
+    def reset(self):
+        self.isUsing = False
+        self.beverage = None
+        self.remainingTime = self.usingTime
+
+dictAct = {}
 
 class Action:
     name = "행동"
@@ -65,6 +73,7 @@ class Action:
     usingTime = 0
 
     def __init__(self, name: str, actType: int, usingTime):
+        dictAct[name] = self
         self.name = name
         self.actType = actType
         self.usingTime = usingTime
@@ -108,6 +117,11 @@ class MachineController:
     def sendBackward(self, machineKind: int):
         self.machines[machineKind -
                       1].append(self.machines[machineKind-1].pop(0))
+
+    def reset(self):
+        for machinesOneType in self.machines:
+            for machine in machinesOneType:
+                machine.reset()
 
 
 class Person:
@@ -177,7 +191,6 @@ ACT_POUR_COLD_BREW = Action("컵에 콜드브루 커피 붓기", 0, 5)
 ACT_PUT_GREEN_TEA_POWDER = Action("그린티 파우더 넣기", 0, 5)
 ACT_PEEL_BANANA = Action("바나나 껍질 벗기기", 0, 5)
 ACT_POUR_MAGO_JUICE = Action("망고 베이스 넣기", 0, 5)
-
 
 # 음료
 class BevAmericanoIce(Beverage):
@@ -411,8 +424,44 @@ class BevVanillaLatteHot(Beverage):
     recipe = [ACT_PUT_VANILLA_SYRUP, ACT_ESPRESSO_MACHINE,
               ACT_STEAM_MILK, ACT_STIR, ACT_POUR_MILK_IN_CUP, ACT_END]
 
-# 깊은 복사 필요!
-bevList = [BevAmericanoIce(),BevAmericanoHot(),BevLatteIce(),BevLatteHot(),BevDolceLatteIce(),BevDolceLatteHot(),BevCaffeMochaIce(),BevCaffeMochaHot(),BevWhiteChocoMochaIce(),BevWhiteChocoMochaHot(),BevCaramelMacchiatoIce(),BevCaramelMacchiatoHot(),BevJavaChipFrappuccino(),BevEspressoFrappuccino(),BevMochaFrappuccino(),BevCaramelFrappuccino(),BevWhiteChocoMochaFrappuccino(),BevGreenTeaFrappuccino(),BevMangoBananaBlended(),BevMintBlendTeaIce(),BevMintBlendTeaHot(),BevEarlGreyTeaIce(),BevEarlGreyTeaHot(),BevYouthberryTeaIce(),BevYouthberryTeaHot(),BevEnglishBreakfastTeaIce(),BevEnglishBreakfastTeaHot(),BevGreenTeaIce(),BevGreenTeaHot(),BevChamomileTeaIce(),BevChamomileTeaHot(), BevHibiscusTeaIce(),BevHibiscusTeaHot(),BevGreenTeaLatteIce(),BevGreenTeaLatteHot(),BevSignatureChocoIce(), BevSignatureChocoHot(),BevColdBrew(),BevVanillaLatteIce(),BevVanillaLatteHot(),BevAmericanoIce(),BevAmericanoHot(),BevLatteIce()]
+
+bevList = [BevAmericanoIce(),BevAmericanoHot(),BevLatteIce(),BevLatteHot(),BevDolceLatteIce(),BevDolceLatteHot(),BevCaffeMochaIce(),BevCaffeMochaHot(),BevWhiteChocoMochaIce(),BevWhiteChocoMochaHot(),BevCaramelMacchiatoIce(),BevCaramelMacchiatoHot(),BevJavaChipFrappuccino(),BevEspressoFrappuccino(),BevMochaFrappuccino(),BevCaramelFrappuccino(),BevWhiteChocoMochaFrappuccino(),BevGreenTeaFrappuccino(),BevMangoBananaBlended(),BevMintBlendTeaIce(),BevMintBlendTeaHot(),BevEarlGreyTeaIce(),BevEarlGreyTeaHot(),BevYouthberryTeaIce(),BevYouthberryTeaHot(),BevEnglishBreakfastTeaIce(),BevEnglishBreakfastTeaHot(),BevGreenTeaIce(),BevGreenTeaHot(),BevChamomileTeaIce(),BevChamomileTeaHot(), BevHibiscusTeaIce(),BevHibiscusTeaHot(),BevGreenTeaLatteIce(),BevGreenTeaLatteHot(),BevSignatureChocoIce(), BevSignatureChocoHot(),BevColdBrew(),BevVanillaLatteIce(),BevVanillaLatteHot()]
+
+#유저 커스텀 파일 읽기
+with open("Custom.json", 'r', encoding='UTF-8') as custom:
+    customData = json.load(custom)
+    
+    # 커스텀 기계 추가
+    machineList = [[],[]]
+    for cmachine in customData["machine"]:
+        ctype = cmachine["type"]
+        cname = cmachine["name"]
+        ctime = cmachine["time"]
+        if ctype <= 2:
+            machineList[ctype].append(Machine(cname, ctime))
+
+    machineController = MachineController(machineList[0], machineList[1],
+                                          [Machine("티 우리기1", 300), Machine("티 우리기2", 300), Machine("티 우리기3", 300),
+                                           Machine("티 우리기4", 300), Machine("티 우리기5", 300)])
+    # 커스텀 동작 추가
+    for cact in customData["action"]:
+        cname = cact["name"]
+        ctime = cact["time"]
+        Action(cname, 0, ctime) # 자동으로 act dictionary에 추가
+    # 커스텀 음료 추가
+    for cbev in customData["beverage"]:
+        cname = cbev["name"]
+        crecipe = cbev["recipe"]
+
+        recipe = []
+        for act in crecipe:
+            recipe.append(dictAct.get(act))
+        recipe.append(ACT_END)
+
+        bev = Beverage(cname, recipe)
+        bevList.append(bev)
+
+
 
 if __name__ == '__main__':
     # 객체 생성
