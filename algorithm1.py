@@ -11,7 +11,7 @@ machineController = MachineController([Machine("에스프레소 머신1", 24), M
 person = Person(machineController)
 
 
-file_path = "test_case_10.txt"
+file_path = "Testing_data(정상 주문)/testing_data(1만(정상)).txt"
 team, case = read_data_to_2d_array(file_path)
 
 timeAll = []
@@ -115,9 +115,9 @@ for t, c in zip(team, case):
     print("=========================== 실행 결과 ==========================")
     print("총 걸린 시간: ", person.usedTime)
     print("모든 기계 실행중인 동안 기다린 시간: ", waitingTime)
-    print("음료 별 제작에 걸린 시간: ", bevTime)
+    #print("음료 별 제작에 걸린 시간: ", bevTime)
     print("음료 별 제작에 걸린 시간의 평균: ", bevAvg)
-    print("음료 별 제작이 끝나는 시간: ", bevCompTime)
+    #print("음료 별 제작이 끝나는 시간: ", bevCompTime)
     print("음료 별 제작이 끝나는 시간의 평균: ", bevCompAvg)
     print("================================================================")
     print()
