@@ -6,7 +6,7 @@ from main_2 import *
 import copy # 깊은 복사에 사용
 from utility import read_data_to_2d_array # 파일 읽기에 사용
 import json
-
+import time
 
 class Recorder: # 알고리즘 평가 지표 기록 클래스
     def __init__(self):
@@ -16,8 +16,9 @@ class Recorder: # 알고리즘 평가 지표 기록 클래스
         self.beverage_average_complete_time_list = [] # case 별 음료가 완성된 시간의 평균 기록
         self.team_average_complete_time_list = [] # case 별 팀 음료가 모두 완성된 시간의 평균 기록
         self.average = []
+        self.operation_time = []
 
-    def record(self, all_complete_time:int, waited_time:int, beverage_start_time:list, beverage_complete_time:list, team_len:list):
+    def record(self, all_complete_time:int, waited_time:int, beverage_start_time:list, beverage_complete_time:list, team_len:list, time:int):
         self.all_complete_time_list.append(all_complete_time)# case 별 모든 작업이 끝날 때까지 걸린 시간 기록
         self.waited_time_list.append(waited_time)# case 별 기다린 시간 기록
 
@@ -29,6 +30,8 @@ class Recorder: # 알고리즘 평가 지표 기록 클래스
         team_complete_time = [max(beverage_complete_time[i:j]) for i, j in zip([0]+team_idx,team_idx)] # 팀별 끝난 시간 계산
         self.team_average_complete_time_list.append(np.mean(team_complete_time)) # case 별 팀 음료가 모두 완성된 시간의 평균 기록
 
+        self.operation_time.append(time)
+
     def team_len_to_team_idx(self, team_len) -> list:
         len = 0
         team_idx = []
@@ -39,12 +42,12 @@ class Recorder: # 알고리즘 평가 지표 기록 클래스
 
     def save_to_file(self):
         dic = {}
+        dic["average of all_complete_time,waited_time,beverage_average_making_time,beverage_average_complete_time,team_average_complete_time, operation_time"]=self.average
         dic["all_complete_time_list"] = self.all_complete_time_list
         dic["waited_time_list"] = self.waited_time_list
         dic["beverage_average_making_time_list"] = self.beverage_average_making_time_list
         dic["beverage_average_complete_time_list"] = self.beverage_average_complete_time_list
         dic["team_average_complete_time_list"] = self.team_average_complete_time_list
-        dic["average of all_complete_time,waited_time,beverage_average_making_time,beverage_average_complete_time,team_average_complete_time"]=self.average
         with open('./algorithm3_data.json','w') as f:
             json.dump(dic, f, indent=4) # 한글 포함된 경우, ensure_ascii=False 옵션 추가
 
@@ -53,13 +56,15 @@ class Recorder: # 알고리즘 평가 지표 기록 클래스
         np.mean(self.waited_time_list), 
         np.mean(self.beverage_average_making_time_list),
         np.mean(self.beverage_average_complete_time_list),
-        np.mean(self.team_average_complete_time_list) ]
+        np.mean(self.team_average_complete_time_list),
+        np.mean(self.operation_time) ]
 
         print("all_complete_time", self.average[0])  
         print("waited_time", self.average[1])  
         print("beverage_average_making_time", self.average[2])
         print("beverage_average_complete_time", self.average[3])
         print("team_average_complete_time", self.average[4])
+        print("operation_time", self.average[5])
 
 
  # 객체 생성
@@ -70,7 +75,11 @@ class Recorder: # 알고리즘 평가 지표 기록 클래스
 
 
 
-file_path = "Testing_data(정상 주문)/testing_data(1만(정상)).txt"
+file_path = "Testing_data(비정상 주문)/testing_data(10만(비정상)).txt"
+# "Testing_data(비정상 주문)/testing_data(10만(비정상)).txt"
+# "Testing_data(비정상 주문)/testing_data(1만(비정상)).txt"
+# "Testing_data(정상 주문)/testing_data(1만(정상)).txt"
+# "Testing_data(정상 주문)/testing_data(10만(정상)).txt"
 team, case = read_data_to_2d_array(file_path)
 
 # order = [] #주문 (음료 큐)
@@ -109,6 +118,8 @@ for t, c in zip(team, case):
 
     beverage_start_time = [-1]*(len(order)) # 음료 제작을 시작한 시간
     beverage_complete_time = [-1]*len(order) # 음료 제작을 완료한 시간
+
+    start_time = time.time()
 
     while done != len(order): # 주문이 있는 동안 반복
         # print()
@@ -206,7 +217,7 @@ for t, c in zip(team, case):
     # print("음료가 나오기까지 걸린 시간:",beverage_complete_time)
     # print("================================================================")
 
-    record.record(person.usedTime, waited_time, beverage_start_time, beverage_complete_time, t)
+    record.record(person.usedTime, waited_time, beverage_start_time, beverage_complete_time, t, time.time()-start_time)
 
 record.print_average()
 record.save_to_file()
