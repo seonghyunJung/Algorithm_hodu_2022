@@ -69,41 +69,58 @@ for t, c in zip(team, case):
 
     # 변수 초기화
     current_idx = 0 # 실행중 인덱스 초기화
-    doing = 1 # 진행중인 작업 개수 초기화
     check = -1 # 무한반복 방지 기계 꽉참 표시 변수
+
+    # doing = 1 # 진행중인 작업 개수 초기화
+    doing_idx = 0 # 진행중인 리스트에서 진행중인 작업의 인덱스
+    doing_list = [0] # 진행중인 작업 인덱스 리스트
 
     done = 0 # 완료한 음료 수
 
     waited_time = 0 # 기계를 기다린 시간
 
-    beverage_start_time = [0]*len(order) # 음료 제작을 시작한 시간
-    beverage_complete_time = [0]*len(order) # 음료 제작을 완료한 시간
+    beverage_start_time = [-1]*(len(order)) # 음료 제작을 시작한 시간
+    beverage_complete_time = [-1]*len(order) # 음료 제작을 완료한 시간
 
-    while order: # 주문이 있는 동안 반복
+    while done != len(order): # 주문이 있는 동안 반복
         print()
-        print("[진행중인 음료 수]", doing)
+        print("[진행중인 음료 수]", len(doing_list))
         print("[완료한 음료 수]", done)
-        print("[남은 손님 수]", len(order))
+        print("[남은 손님 수]", len(order)-done)
         print("[현재 음료 정보]", order[current_idx].name)
         print("[현재 시간]", person.usedTime)
         res = person.do(order[current_idx]) # 위치의 인덱스 실행
         if res == 2: # 완료한 경우
-            print("[제작 완료]", order[current_idx].name)
-            order.pop(current_idx) # 해당 인덱스의 값 pop
-            beverage_complete_time[current_idx+done] = person.usedTime # 끝난 시간 저장 # TODO: 끝난 시간 저장 오류 수정
+            print("[제작 완료]", order[current_idx].name)                
+            order[current_idx] = None
+            # order.pop(current_idx) # 해당 인덱스의 값 pop
+            beverage_complete_time[current_idx] = person.usedTime # 끝난 시간 저장 # TODO: 끝난 시간 저장 오류 수정
             done += 1
-            if doing !=1: # 모든 작업을 끝냈거나, 1개 초과로 실행중일 때
-                doing -= 1 # 작업이 끝났으므로, 진행중인 작업 개수 -1
-            if current_idx != 0:
-                current_idx -= 1 # 처음 작업이 끝난게 아니라면 바로 이전 작업으로 돌아가기(먼저 들어온 음료 먼저 처리하는게 손님이 음료 빨리 받아서 이득)
-                print("[음료 변경]", order[current_idx].name)
-            
+            # if doing !=1: # 모든 작업을 끝냈거나, 1개 초과로 실행중일 때
+            #     doing -= 1 # 작업이 끝났으므로, 진행중인 작업 개수 -1
+            # if current_idx != 0:
+            #     current_idx -= 1 # 처음 작업이 끝난게 아니라면 바로 이전 작업으로 돌아가기(먼저 들어온 음료 먼저 처리하는게 손님이 음료 빨리 받아서 이득)
+            #     print("[음료 변경]", order[current_idx].name)
+            doing_list.pop(doing_idx) # 실행중 리스트에서 현재 실행한 값 제외
             check = -1 # 기계 꽉참 해제
-            continue
+            if not doing_list:
+                if len(doing_list)<(len(order)-done):# 진행중인 작업 개수 늘릴 수 있을 때
+                    temp = 0
+                    while order[temp] == None or temp in doing_list: # temp<len(order) and 
+                        temp += 1
+                    doing_list.append(temp) # 진행중인 리스트에 새로운 인덱스 추가
+                    print("작업수를 ", len(doing_list),"로 증가")
+                else:
+                    break
+            # continue
         
         elif res == 1: # 작업이 진행되었을 때
-            if order[current_idx].step <= 1 and beverage_start_time[current_idx+done] == 0: # 음료의 처음 작업 식행 시
-                beverage_start_time[current_idx+done] = person.usedTime # 시작 시간 저장 # TODO: 시작 시간 저장 오류 수정
+            if order[current_idx].step == 0 and beverage_start_time[current_idx] == -1: # 처음 시작한 일이 기계가 하는 일일 때
+                beverage_start_time[current_idx] = person.usedTime
+                # pass
+            elif order[current_idx].step == 1 and beverage_start_time[current_idx] == -1: # 음료의 처음 작업 식행 시
+                # doing_list.append(current_idx)
+                beverage_start_time[current_idx] = person.usedTime-order[current_idx].recipe[order[current_idx].step-1].usingTime # 시작 시간 저장 # TODO: 시작 시간 저장 오류 수정
 
             # print("[제작 진행]", end=" ")
             # # 선택지3: 사람이 진행하는 일이 있다면, 해당 작업을 저장, 없다면, 모든 진행중 저장
@@ -112,8 +129,9 @@ for t, c in zip(team, case):
             # if not temp:
             #     temp = order[:doing]
             # 선택지1 : 진행중인 작업 중 제일 빨리 끝나는 작업 실행
-            temp = order[:doing]
-            current_idx = np.argmin(do.getCurrentStep().usingTime for do in temp)
+            temp = [order[i] for i in doing_list]
+            doing_idx = np.argmin(do.getCurrentStep().usingTime for do in temp)
+            current_idx = doing_list[doing_idx]
 
             # 선택지2: 맨 처음 작업 실행
             # current_idx = 0
@@ -127,9 +145,12 @@ for t, c in zip(team, case):
             print("[제작 실패]", end = " ")
 
             if check == current_idx: # 다른 작업을 진행해봤으나, 더 진행이 안되는 경우
-                if doing<len(order):# 진행중인 작업 개수 늘릴 수 있을 때
-                    doing+=1 # 진행중인 작업 개수 +1
-                    print("작업수를 ", doing,"로 증가")
+                if len(doing_list)<(len(order)-done):# 진행중인 작업 개수 늘릴 수 있을 때
+                    temp = 0
+                    while order[temp] == None or temp in doing_list: # temp<len(order) and 
+                        temp += 1
+                    doing_list.append(temp) # 진행중인 리스트에 새로운 인덱스 추가
+                    print("작업수를 ", len(doing_list),"로 증가")
 
                 else:
                     f = min(machineController.getEarlistEnd(i+1) for i in range(len(machineController.machines))) # 가장 빨리 끝나는 기계 시간 # 가장 짧은 시간 계산
@@ -144,7 +165,9 @@ for t, c in zip(team, case):
                 check = current_idx # 할 일 : 사람이 할 수 있는 일 있는지 보고, 없으면 기계 기다리기...?
 
             # 실행 중 인덱스 업데이트
-        current_idx = (current_idx + 1) % doing # 진행중 음료 개수로 나눈 나머지 값으로 업데이트 하여 동시에 제작하는 음료 수 제한
+        
+        doing_idx = (doing_idx + 1) % len(doing_list) # 진행중 음료 개수로 나눈 나머지 값으로 업데이트 하여 동시에 제작하는 음료 수 제한
+        current_idx = doing_list[doing_idx] # 진행할 인덱스를 진행중인 리스트에서 찾아서 설정
         print("[음료 변경]", order[current_idx].name)
 
     print()
