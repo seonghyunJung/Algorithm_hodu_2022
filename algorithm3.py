@@ -5,6 +5,7 @@ import numpy as np
 from main_2 import *
 import copy # 깊은 복사에 사용
 from utility import read_data_to_2d_array # 파일 읽기에 사용
+import json
 
 
 class Recorder: # 알고리즘 평가 지표 기록 클래스
@@ -34,6 +35,18 @@ class Recorder: # 알고리즘 평가 지표 기록 클래스
             len+=l
             team_idx.append(len)
         return team_idx
+
+    def save_to_file(self):
+        dic = {}
+        dic["all_complete_time_list"] = self.all_complete_time_list
+        dic["waited_time_list"] = self.waited_time_list
+        dic["beverage_average_making_time_list"] = self.beverage_average_making_time_list
+        dic["beverage_average_complete_time_list"] = self.beverage_average_complete_time_list
+        dic["team_average_complete_time_list"] = self.team_average_complete_time_list
+        with open('./algorithm3_data.json','w') as f:
+            json.dump(dict, f, indent=4) # 한글 포함된 경우, ensure_ascii=False 옵션 추가
+
+        
 
 
  # 객체 생성
@@ -180,7 +193,7 @@ for t, c in zip(team, case):
 
     record.record(person.usedTime, waited_time, beverage_start_time, beverage_complete_time, t)
 
-
+record.save_to_file()
 
 
 # =========================== 실행 결과 ==========================
