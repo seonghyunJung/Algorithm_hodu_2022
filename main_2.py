@@ -457,7 +457,6 @@ with open("Custom.json", 'r', encoding='UTF-8') as custom:
         for act in crecipe:
             recipe.append(dictAct.get(act))
         recipe.append(ACT_END)
-        print(recipe)
 
         bev = Beverage(cname, recipe)
         bevList.append(bev)
