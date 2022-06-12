@@ -25,7 +25,7 @@ def algor2_1(order):
                     if _b.waiting:
                         continue
                     i = 0
-                    leftRecipe = _b.recipe[_b.step:0]
+                    leftRecipe = _b.recipe[_b.step:]
                     for _a in leftRecipe:
                         if minInd > i:
                             break
