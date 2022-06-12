@@ -218,7 +218,7 @@ for t, c in zip(team, case):
     # print("================================================================")
 
     record.record(person.usedTime, waited_time, beverage_start_time, beverage_complete_time, t, time.time()-start_time)
-
+    machineController.reset()
 record.print_average()
 record.save_to_file()
 
