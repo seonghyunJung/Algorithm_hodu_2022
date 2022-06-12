@@ -160,8 +160,7 @@ for t, c in zip(team, case):
                     continue
 
             elif check == -1: # 작업을 더이상 늘릴 수 없고, 다른 작업을 진행해볼 여지가 있을 때
-                # print("다른 작업이 실행 가능한지 탐색")
-                check = current_idx # 할 일 : 사람이 할 수 있는 일 있는지 보고, 없으면 기계 기다리기...?
+                check = current_idx 
                 
         doing_idx = (doing_idx + 1) % len(doing_list) 
         current_idx = doing_list[doing_idx]
