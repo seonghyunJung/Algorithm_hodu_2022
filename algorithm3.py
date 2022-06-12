@@ -75,7 +75,7 @@ class Recorder: # 알고리즘 평가 지표 기록 클래스
 
 
 
-file_path = "Testing_data(비정상 주문)/testing_data(10만(비정상)).txt"
+file_path ="Testing_data(비정상 주문)/testing_data(10만(비정상)).txt"
 # "Testing_data(비정상 주문)/testing_data(10만(비정상)).txt"
 # "Testing_data(비정상 주문)/testing_data(1만(비정상)).txt"
 # "Testing_data(정상 주문)/testing_data(1만(정상)).txt"
@@ -168,9 +168,9 @@ for t, c in zip(team, case):
             # if not temp:
             #     temp = order[:doing]
             # 선택지1 : 진행중인 작업 중 제일 빨리 끝나는 작업 실행
-            temp = [order[i] for i in doing_list]
-            doing_idx = np.argmin(do.getCurrentStep().usingTime for do in temp)
-            current_idx = doing_list[doing_idx]
+            # temp = [order[i] for i in doing_list]
+            # doing_idx = np.argmin(do.getCurrentStep().usingTime for do in temp)
+            # current_idx = doing_list[doing_idx]
 
             # 선택지2: 맨 처음 작업 실행
             # current_idx = 0
